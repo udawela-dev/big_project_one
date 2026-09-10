@@ -387,7 +387,7 @@
 
     <section class="list-section">
       <h2 class="list-title">Your food</h2>
-      <p class="list-count">{{ foods|length }} item{% if foods|length != 1 %}s{% endif %} in the fridge</p>
+      <p class="list-count">{{ foods|length }} item{% if foods|length != 1 %}s{% endif %} total: {{ fridge_foods|length }} in the fridge, {{ pantry_foods|length }} in the pantry</p>
 
       <div class="sort-links">
         <span class="sort-label">Sort:</span>

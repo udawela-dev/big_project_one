@@ -136,6 +136,12 @@ class DaysLeftTests(FreshTrackTests):
     def test_status_text_today(self):
         self.assertEqual(status_text(0), "Expires today!")
 
+    def test_status_text_singular_day(self):
+        self.assertEqual(status_text(1), "1 day left — Expiring soon!")
+
+    def test_status_text_singular_day_expired(self):
+        self.assertEqual(status_text(-1), "Expired 1 day ago")
+
     def test_status_text_expired(self):
         self.assertEqual(status_text(-3), "Expired 3 days ago")
 
@@ -525,6 +531,23 @@ class FridgePantrySectionsTests(FreshTrackTests):
         page = self.client.get("/").get_data(as_text=True)
         self.assertIn("Fridge (1)", page)
         self.assertIn("Pantry (1)", page)
+
+    def test_list_subtitle_counts_are_accurate(self):
+        db.add_food("Milk", self.in_days(5), "Dairy")
+        db.add_food("Pasta", self.in_days(300), "Pantry")
+        page = self.client.get("/").get_data(as_text=True)
+        self.assertIn("2 items total: 1 in the fridge, 1 in the pantry", page)
+
+    def test_error_page_keeps_expiry_sort(self):
+        db.add_food("Cheese", self.in_days(1))
+        db.add_food("Milk", self.in_days(5))
+        response = self.client.post(
+            "/add?sort=expiry",
+            data={"name": "  ", "expiry_date": self.in_days(5)},
+        )
+        page = response.get_data(as_text=True)
+        self.assertIn('sort-link active">Soonest first', page)
+        self.assertLess(page.index("Cheese"), page.index("Milk"))
 
 
 class DashboardTests(FreshTrackTests):

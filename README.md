@@ -66,7 +66,7 @@ instead of being saved.
   extra packages — the database is just one local file called
   `freshtrack.db`.
 - **Tests:** `unittest` from the Python standard library. `python -m unittest`
-  runs all 65 tests.
+  runs all 69 tests.
 - **Logging:** Python's built-in `logging` module logs when the list is
   viewed and when food is added, edited, or removed.
 

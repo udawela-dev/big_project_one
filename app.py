@@ -34,12 +34,15 @@ def days_left(expiry_date):
 def status_text(days):
     """The warning message for a given number of days until expiry."""
     if days < 0:
-        return f"Expired {-days} days ago"
+        days_ago = -days
+        suffix = "day" if days_ago == 1 else "days"
+        return f"Expired {days_ago} {suffix} ago"
     if days == 0:
         return "Expires today!"
+    suffix = "day" if days == 1 else "days"
     if days <= EXPIRING_SOON_DAYS:
-        return f"{days} days left — Expiring soon!"
-    return f"{days} days left"
+        return f"{days} {suffix} left — Expiring soon!"
+    return f"{days} {suffix} left"
 
 
 def status_color(days):
@@ -105,7 +108,7 @@ def sort_foods(foods, sort="newest"):
 def show_page(error=None, status=200, foods=None, added=None, sort="newest"):
     """Render the home page with the food list and an optional message."""
     if foods is None:
-        foods = build_foods()
+        foods = sort_foods(build_foods(), sort)
     fridge_foods = [food for food in foods if food["category"] != "Pantry"]
     pantry_foods = [food for food in foods if food["category"] == "Pantry"]
     return render_template(
@@ -131,18 +134,19 @@ def index():
 
 @app.route("/add", methods=["POST"])
 def add():
+    sort = request.args.get("sort", "newest")
     name = request.form.get("name", "").strip()
     expiry_date = request.form.get("expiry_date", "").strip()
     category = request.form.get("category", "Other")
 
     if not name:
-        return show_page("Please enter a food name.", status=400)
+        return show_page("Please enter a food name.", status=400, sort=sort)
 
     if not valid_date(expiry_date):
-        return show_page("Please enter a valid date (YYYY-MM-DD).", status=400)
+        return show_page("Please enter a valid date (YYYY-MM-DD).", status=400, sort=sort)
 
     if category not in CATEGORIES:
-        return show_page("Please pick a category from the list.", status=400)
+        return show_page("Please pick a category from the list.", status=400, sort=sort)
 
     db.add_food(name, expiry_date, category)
     app.logger.info(f"Added food: {name} ({expiry_date}, {category})")
@@ -200,4 +204,4 @@ def remove(food_id):
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     db.init_db()
-    app.run(host="0.0.0.0", port=3000)
+    app.run(host="0.0.0.0", port=PORT)

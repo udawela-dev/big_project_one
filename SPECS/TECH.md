@@ -4,8 +4,9 @@
 
 - **Backend:** Python with Flask. Flask serves the web pages (simple to run:
   `python app.py`).
-- **Frontend:** Plain HTML, CSS, and vanilla JavaScript. No React, no other
-  libraries or frameworks.
+- **Frontend:** Plain HTML, CSS, and vanilla JavaScript (none used yet — forms
+  post normally and the page reloads). No React, no other libraries or
+  frameworks.
 - **Storage:** SQLite via Python's built-in `sqlite3` module. The food stays
   saved even when the server restarts.
 
@@ -13,8 +14,9 @@
 
 - Flask shows a page where the user adds food.
 - Each food item is stored in a SQLite database, with a name and an expiry date.
-- Pages are built with regular HTML/CSS; a little vanilla JavaScript makes the
-  page feel alive without reloading.
+- Pages are built with regular HTML/CSS and plain HTML forms; submitting a
+  form reloads the page with the new list. (No JavaScript yet, but it stays
+  available if a future feature needs it.)
 
 ## Engineering standards
 
