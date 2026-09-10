@@ -482,5 +482,50 @@ class SortByExpiryTests(FreshTrackTests):
         self.assertIn("Newest first", page)
 
 
+class FridgePantrySectionsTests(FreshTrackTests):
+    """Tests for showing fridge and pantry items in separate sections."""
+
+    @staticmethod
+    def in_days(n):
+        return (date.today() + timedelta(days=n)).isoformat()
+
+    def test_page_shows_fridge_and_pantry_headings(self):
+        db.add_food("Milk", self.in_days(5), "Dairy")
+        db.add_food("Pasta", self.in_days(300), "Pantry")
+        page = self.client.get("/").get_data(as_text=True)
+        self.assertIn('class="section-subtitle">Fridge', page)
+        self.assertIn('class="section-subtitle">Pantry', page)
+
+    def test_fridge_and_pantry_items_appear_in_their_own_sections(self):
+        db.add_food("Butter", self.in_days(30), "Dairy")
+        db.add_food("Pasta", self.in_days(300), "Pantry")
+        page = self.client.get("/").get_data(as_text=True)
+
+        fridge_heading = page.index('class="section-subtitle">Fridge')
+        pantry_heading = page.index('class="section-subtitle">Pantry')
+        self.assertLess(fridge_heading, pantry_heading)
+
+        butter_idx = page.index("Butter")
+        self.assertGreater(butter_idx, fridge_heading)
+        self.assertLess(butter_idx, pantry_heading)
+
+        pasta_idx = page.index("Pasta")
+        self.assertGreater(pasta_idx, pantry_heading)
+
+    def test_fridge_heading_hidden_when_no_fridge_items(self):
+        db.add_food("Rice", self.in_days(200), "Pantry")
+        page = self.client.get("/").get_data(as_text=True)
+        self.assertNotIn('class="section-subtitle">Fridge', page)
+        self.assertIn('class="section-subtitle">Pantry', page)
+        self.assertIn("Rice", page)
+
+    def test_section_counts_are_shown(self):
+        db.add_food("Milk", self.in_days(5), "Dairy")
+        db.add_food("Pasta", self.in_days(300), "Pantry")
+        page = self.client.get("/").get_data(as_text=True)
+        self.assertIn("Fridge (1)", page)
+        self.assertIn("Pantry (1)", page)
+
+
 if __name__ == "__main__":
     unittest.main()

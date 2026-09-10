@@ -106,9 +106,13 @@ def show_page(error=None, status=200, foods=None, added=None, sort="newest"):
     """Render the home page with the food list and an optional message."""
     if foods is None:
         foods = build_foods()
+    fridge_foods = [food for food in foods if food["category"] != "Pantry"]
+    pantry_foods = [food for food in foods if food["category"] == "Pantry"]
     return render_template(
         "index.html",
         foods=foods,
+        fridge_foods=fridge_foods,
+        pantry_foods=pantry_foods,
         week_items=week_items(foods),
         error=error,
         added=added,

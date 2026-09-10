@@ -165,6 +165,13 @@
 
     .list-count { font-size: 13px; color: #8b98a0; margin-bottom: 14px; }
 
+    .section-subtitle {
+      font-size: 14px;
+      font-weight: 700;
+      color: #41616e;
+      margin: 4px 0 10px;
+    }
+
     .sort-links { margin-bottom: 14px; font-size: 13px; }
 
     .sort-label { color: #8b98a0; margin-right: 6px; }
@@ -340,28 +347,34 @@
         <a href="/?sort=expiry" class="sort-link{% if sort == 'expiry' %} active{% endif %}">Soonest first</a>
       </div>
 
-      {% if foods %}
-        <ul class="food-list">
-          {% for food in foods %}
-            <li class="food-item">
-              <div>
-                <div class="food-name">{{ food.name }}</div>
-                <div class="food-expiry">Expires {{ food.expiry_date }} &middot; {{ food.category }}</div>
-              </div>
-              <div class="food-right">
-                <span class="badge">{{ food.category }}</span>
-                <span class="badge status-{{ food.color }}">{{ food.status }}</span>
-              </div>
-              <div class="food-actions">
-                <a class="btn btn-edit" href="/edit/{{ food.id }}">Edit</a>
-                <form action="/remove/{{ food.id }}" method="post" class="remove-form">
-                  <button type="submit" class="btn btn-remove">Remove</button>
-                </form>
-              </div>
-            </li>
-          {% endfor %}
-        </ul>
-      {% else %}
+      {% set sections = [("Fridge", fridge_foods), ("Pantry", pantry_foods)] %}
+      {% for title, section_foods in sections %}
+        {% if section_foods %}
+          <h3 class="section-subtitle">{{ title }} ({{ section_foods|length }})</h3>
+          <ul class="food-list">
+            {% for food in section_foods %}
+              <li class="food-item">
+                <div>
+                  <div class="food-name">{{ food.name }}</div>
+                  <div class="food-expiry">Expires {{ food.expiry_date }} &middot; {{ food.category }}</div>
+                </div>
+                <div class="food-right">
+                  <span class="badge">{{ food.category }}</span>
+                  <span class="badge status-{{ food.color }}">{{ food.status }}</span>
+                </div>
+                <div class="food-actions">
+                  <a class="btn btn-edit" href="/edit/{{ food.id }}">Edit</a>
+                  <form action="/remove/{{ food.id }}" method="post" class="remove-form">
+                    <button type="submit" class="btn btn-remove">Remove</button>
+                  </form>
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% endfor %}
+
+      {% if not fridge_foods and not pantry_foods %}
         <div class="empty-state">
           Nothing here yet. Add your first food above.
         </div>

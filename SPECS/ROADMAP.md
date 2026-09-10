@@ -28,6 +28,9 @@ and full edit/remove support. The database is SQLite; the server runs on Flask.
 8. **Sort by expiry date** — a "Soonest first" view so the most urgent
    items appear at the top (default stays newest-first). *(SPECS/
    2026-09-10-sort-by-expiry — implemented, tests green)*
+9. **Fridge and Pantry sections** — the list is split into separate Fridge
+   and Pantry sections, each with its own count. *(SPECS/
+   2026-09-10-fridge-pantry-sections — implemented, tests green)*
 
 ## Long-term vision (not yet planned)
 
