@@ -2,6 +2,8 @@
 
 > Keep a list of the food you have and when it expires.
 
+Repository: [github.com/udawela-dev/big_project_one](https://github.com/udawela-dev/big_project_one)
+
 FreshTrack is a simple web app that helps you stop wasting food. You keep a
 list of the food you own, with its expiry date, so you always know what to eat
 before it goes bad.
