@@ -265,6 +265,32 @@ class CategoryFormTests(FreshTrackTests):
         rows = db.all_foods()
         self.assertEqual(rows[0][3], "Other")
 
+    def test_cupboard_category_is_rejected(self):
+        response = self.client.post(
+            "/add",
+            data={
+                "name": "Biscuits",
+                "expiry_date": self.in_days(30),
+                "category": "Cupboard",
+            },
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(len(db.all_foods()), 0)
+
+    def test_pantry_category_is_saved(self):
+        response = self.client.post(
+            "/add",
+            data={
+                "name": "Pasta",
+                "expiry_date": self.in_days(300),
+                "category": "Pantry",
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+        rows = db.all_foods()
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0][3], "Pantry")
+
 
 class WeeklyReminderTests(FreshTrackTests):
     """Tests for the week_items filter (weekly reminder T1)."""

@@ -19,7 +19,7 @@ and full edit/remove support. The database is SQLite; the server runs on Flask.
    2026-09-10-days-left-warnings — implemented, tests green)*
 4. **Color-coded expiry warnings** (green = fine, yellow = soon, red = past).
    *(SPECS/2026-09-10-color-coded-warnings — implemented, tests green)*
-5. **Categories for food** (Dairy, Meat, Veg, Fruit, Cupboard, Other).
+5. **Categories for food** (Dairy, Meat, Veg, Fruit, Pantry, Other).
    *(SPECS/2026-09-10-categories — implemented, tests green)*
 6. **Weekly "use up" reminder** — panel listing items expiring within 7
    days. *(SPECS/2026-09-10-weekly-reminder — implemented, tests green)*

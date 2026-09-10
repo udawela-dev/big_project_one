@@ -16,7 +16,7 @@ CATEGORIES = [
     "Meat",
     "Veg",
     "Fruit",
-    "Cupboard",
+    "Pantry",
     "Other",
 ]
 

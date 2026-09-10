@@ -11,7 +11,8 @@ the data tidy and the validation simple.
 
 1. A new `category` column on the `food` table, defaulting to `"Other"`.
 2. The add-food form gets a dropdown with the fixed list:
-   `Dairy, Meat, Veg, Fruit, Cupboard, Other`.
+   `Dairy, Meat, Veg, Fruit, Pantry, Other`.
+   (Originally `Cupboard`; swapped for `Pantry` on 2026-09-10.)
 3. Submitting the form saves the chosen category ("Other" if needed).
 4. The list shows the category next to each item.
 5. Validation: an unknown category value is rejected server-side.
