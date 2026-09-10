@@ -58,6 +58,39 @@
       margin-top: 4px;
     }
 
+    /* Dashboard */
+    .dashboard {
+      margin-top: 20px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      flex: 1 1 140px;
+      background: #ffffff;
+      border: 1px solid #e3e8ec;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(20, 40, 60, 0.06);
+    }
+
+    .stat-count {
+      display: block;
+      font-size: 32px;
+      font-weight: 800;
+      color: #1d4e3f;
+      line-height: 1.2;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #5d6d75;
+    }
+
     /* Reminder panel */
     .reminder {
       margin-top: 20px;
@@ -294,6 +327,21 @@
         <p class="tagline">Keep a list of the food you have and when it expires.</p>
       </div>
     </header>
+
+    <section class="dashboard">
+      <div class="stat">
+        <span class="stat-count" data-section="fridge">{{ fridge_foods|length }}</span>
+        <span class="stat-label">Fridge items</span>
+      </div>
+      <div class="stat">
+        <span class="stat-count" data-section="pantry">{{ pantry_foods|length }}</span>
+        <span class="stat-label">Pantry items</span>
+      </div>
+      <div class="stat">
+        <span class="stat-count" data-section="total">{{ foods|length }}</span>
+        <span class="stat-label">Total items</span>
+      </div>
+    </section>
 
     {% if week_items %}
       <div class="reminder">

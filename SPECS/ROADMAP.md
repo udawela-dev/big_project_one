@@ -31,6 +31,9 @@ and full edit/remove support. The database is SQLite; the server runs on Flask.
 9. **Fridge and Pantry sections** — the list is split into separate Fridge
    and Pantry sections, each with its own count. *(SPECS/
    2026-09-10-fridge-pantry-sections — implemented, tests green)*
+10. **Dashboard counts** — a dashboard at the top shows how many items
+    remain in the fridge and in the pantry, plus a total. *(SPECS/
+    2026-09-10-dashboard — implemented, tests green)*
 
 ## Long-term vision (not yet planned)
 

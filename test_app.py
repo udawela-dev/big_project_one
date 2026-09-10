@@ -527,5 +527,43 @@ class FridgePantrySectionsTests(FreshTrackTests):
         self.assertIn("Pantry (1)", page)
 
 
+class DashboardTests(FreshTrackTests):
+    """Tests for the fridge/pantry dashboard counts."""
+
+    @staticmethod
+    def in_days(n):
+        return (date.today() + timedelta(days=n)).isoformat()
+
+    def test_dashboard_shows_fridge_and_pantry_labels(self):
+        db.add_food("Milk", self.in_days(5), "Dairy")
+        db.add_food("Pasta", self.in_days(300), "Pantry")
+        page = self.client.get("/").get_data(as_text=True)
+        self.assertIn("Fridge items", page)
+        self.assertIn("Pantry items", page)
+
+    def test_dashboard_counts_are_correct(self):
+        db.add_food("Milk", self.in_days(5), "Dairy")
+        db.add_food("Rice", self.in_days(200), "Pantry")
+        db.add_food("Baked Beans", self.in_days(300), "Pantry")
+        page = self.client.get("/").get_data(as_text=True)
+        self.assertIn('data-section="fridge">1<', page)
+        self.assertIn('data-section="pantry">2<', page)
+
+    def test_dashboard_shows_zero_when_populated_later(self):
+        # Nothing in the database yet -> dashboard shows 0 / 0.
+        page = self.client.get("/").get_data(as_text=True)
+        self.assertIn('data-section="fridge">0<', page)
+        self.assertIn('data-section="pantry">0<', page)
+
+    def test_dashboard_updates_after_removing_item(self):
+        db.add_food("Milk", self.in_days(5), "Dairy")
+        db.add_food("Pasta", self.in_days(300), "Pantry")
+        food_id = db.all_foods()[0][0]  # newest item = Pasta
+        self.client.post(f"/remove/{food_id}")
+        page = self.client.get("/").get_data(as_text=True)
+        self.assertIn('data-section="pantry">0<', page)
+        self.assertIn('data-section="fridge">1<', page)
+
+
 if __name__ == "__main__":
     unittest.main()
